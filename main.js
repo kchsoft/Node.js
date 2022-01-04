@@ -16,7 +16,8 @@ var app = http.createServer(function(request,response){
         return;
     }
     response.writeHead(200);
-    var template = `<!doctype html>
+    //``는 템플릿, ${}는 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
+    var template = `<!doctype html> // 
     <html>
     <head>
       <title>WEB1 - ${title}</title>
@@ -37,7 +38,7 @@ var app = http.createServer(function(request,response){
     </body>
     </html>
     `
-    response.end(template);
+    response.end(template); // template를 전송한다.
  
 });
-app.listen(3000);
+app.listen(3000); // 서버의 포트를 3000으로 맞춰준다.
