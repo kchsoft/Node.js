@@ -12,57 +12,73 @@ var app = http.createServer(function(request,response){
   if(pathname === '/') // pathname이 루트라면 === '/' 즉, path가 없는 경로로 왔다면
   {
     if(queryData.id === undefined){
-      fs.readFile(`data/${queryData.id}`,'utf8',function(err,description){
-        //``는 템플릿, ${}는(QueryString) 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
+        fs.readdir('./data',function(error,filelist){
+          //``는 템플릿, ${}는(QueryString) 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
         var title = "WelCome";
         var description = "Hello, Node.js";
-        var template = `<!doctype html>
-       <html>
-       <head>
-         <title>WEB1 - ${title}</title>
-         <meta charset="utf-8">
-       </head>
-       <body>
-         <h1><a href="/">WEB</a></h1>
-         <ol>
-           <li><a href="/?id=HTML">HTML</a></li>
-           <li><a href="/?id=CSS">CSS</a></li>
-           <li><a href="/?id=JavaScript">JavaScript</a></li>
-         </ol>
-         <h2>${title}</h2>
-         <p>${description}</p>
-       </body>
-       </html>
-       `;
-       response.writeHead(200);
-       response.end(template); // template를 전송한다.
-     });
-    }
-    else{
-      fs.readFile(`data/${queryData.id}`,'utf-8',function(err,description){
-        //``는 템플릿, ${}는(QueryString) 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
-        var title = queryData.id;
-        var template = `<!doctype html>
-       <html>
-       <head>
-         <title>WEB1 - ${title}</title>
-         <meta charset="utf-8">
-       </head>
-       <body>
-         <h1><a href="/">WEB</a></h1>
-         <ol>
-           <li><a href="/?id=HTML">HTML</a></li>
-           <li><a href="/?id=CSS">CSS</a></li>
-           <li><a href="/?id=JavaScript">JavaScript</a></li>
-         </ol>
-         <h2>${title}</h2>
-         <p>${description}</p>
-       </body>
-       </html>
-       `;
-       response.writeHead(200);
-       response.end(template); // template를 전송한다.
-     });
+
+        var list ='<ul>';
+        var i = 0;
+         while(i < filelist.length){
+        list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`
+        i += 1;
+      }
+      list = list + '</ul>';
+
+      var template = `<!doctype html>
+      <html>
+      <head>
+        <title>WEB1 - ${title}</title>
+        <meta charset="utf-8">
+      </head>
+      <body>
+        <h1><a href="/">WEB</a></h1>
+        ${list}
+        <h2>${title}</h2>
+        <p>${description}</p>
+      </body>
+      </html>`;
+
+      response.writeHead(200);
+      response.end(template); // template를 전송한다.
+        })
+      }
+      else{
+          fs.readdir('./data',function(error,filelist){
+            //``는 템플릿, ${}는(QueryString) 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
+          var title = "WelCome";
+          var description = "Hello, Node.js";
+
+          var list ='<ul>';
+          var i = 0;
+          while(i < filelist.length){
+            list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`
+            i += 1;
+          }
+          list = list + '</ul>';
+
+
+          fs.readFile(`data/${queryData.id}`,'utf-8',function(err,description){
+            //``는 템플릿, ${}는(QueryString) 템플릿 안에서 변수처럼 사용할 수 있게 해준다.
+            var title = queryData.id;
+            var template = `<!doctype html>
+            <html>
+            <head>
+              <title>WEB1 - ${title}</title>
+              <meta charset="utf-8">
+            </head>
+            <body>
+              <h1><a href="/">WEB</a></h1>
+              ${list}
+              <h2>${title}</h2>
+              <p>${description}</p>
+            </body>
+            </html>`;
+            
+          response.writeHead(200);
+          response.end(template); // template를 전송한다.
+        });
+      });
     }
   }
   else{
